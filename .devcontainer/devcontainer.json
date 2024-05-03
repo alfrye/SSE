@@ -1,0 +1,17 @@
+{
+    "name": "go-react-dev",
+	"build": {
+        "dockerfile": "Dockerfile"
+    },
+
+	"forwardPorts": [
+		3000
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dzannotti.vscode-babel-coloring"
+			]
+		}
+	}
+}
