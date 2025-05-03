@@ -3,15 +3,33 @@
 	"build": {
         "dockerfile": "Dockerfile"
     },
-
+	"mounts": [
+        {
+        "source": "${env:HOME}/.kube", 
+        "target": "/home/vscode/.kube",
+        "type": "bind"
+        }
+    ],
+	"remoteUser": "vscode",
+	"containerEnv": {
+        "SHELL": "/bin/bash"
+    },
 	"forwardPorts": [
 		3000
 	],
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"dzannotti.vscode-babel-coloring"
-			]
+                "ms-kubernetes-tools.vscode-kubernetes-tools",
+                "tilt-dev.Tiltfile",
+                "redhat.vscode-yaml",
+                "kennylong.kubernetes-yaml-formatter",
+                "golang.go",
+                "usernamehw.errorlens",
+                "dzannotti.vscode-babel-coloring",
+                "zxh404.vscode-proto3",
+                "42Crunch.vscode-openapi"
+            ]
 		}
 	}
 }
