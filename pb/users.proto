@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package userservice.apiv1;
+option go_package = "alfrye.io/services/users/pkg/genproto/pbapiv1";
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/httpbody.proto";
+import "google/api/annotations.proto";
+
+service UserSvc {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/users",
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "Create User";
+        description: "Creates a new uaer";
+        tags: "UserSvc"
+        responses: {
+            key: "200"
+            value: {
+                description: "Sucessfully creates user",
+                schema: {
+                    json_schema: {
+                        ref: ".userservice.apiv1.CreateUserResponse"
+                    }
+                }
+            }
+        }
+        };
+    };
+}
+
+
+message User {
+    int32 id = 1;
+    string username = 2;
+}
+
+
+message CreateUserRequest {
+    int32 id = 1;
+    string username = 2;
+}
+
+message CreateUserResponse {
+    bool success = 2;
+}
+

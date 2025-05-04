@@ -1,0 +1,28 @@
+# Copyright (c) 2021 - 2022 Schweitzer Engineering Laboratories, Inc.
+# SEL Confidential
+version: v1beta1
+plugins:
+- name: go
+  out: ./pkg/genproto/
+  opt: paths=source_relative
+- name: go-grpc
+  out: ./pkg/genproto/
+  opt:
+  - paths=source_relative
+  - require_unimplemented_servers=false
+- name: grpc-gateway
+  out: ./pkg/genproto/
+  opt:
+  - allow_delete_body=true
+  - paths=source_relative
+  - allow_repeated_fields_in_body=true
+- name: openapiv2
+  out: ./api/test/static/swaggerui/
+  opt:
+  - allow_delete_body=true
+  - allow_repeated_fields_in_body=true
+  - disable_default_responses=true
+  - disable_default_errors=true
+  - output_format=yaml
+  - allow_merge=true
+  - merge_file_name=iam.swagger
