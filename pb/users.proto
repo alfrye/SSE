@@ -9,6 +9,11 @@ import "google/api/httpbody.proto";
 import "google/api/annotations.proto";
 
 service UserSvc {
+    rpc StreamUpdates(google.protobuf.Empty) returns (stream UpdateResponse) {
+        option (google.api.http) = {
+            get: "/v1/updates"
+        };
+    }
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
     option (google.api.http) = {
       post: "/v1/users",
@@ -33,6 +38,11 @@ service UserSvc {
     };
 }
 
+message UpdateRequest {}
+
+message UpdateResponse {
+    string message = 1;
+}
 
 message User {
     int32 id = 1;

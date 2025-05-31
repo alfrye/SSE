@@ -10,7 +10,8 @@ import (
 )
 
 type Endpoints struct {
-	CreateUser endpoint.Endpoint
+	CreateUser    endpoint.Endpoint
+	StreamUpdates endpoint.Endpoint
 }
 
 type CreateUserRequest struct {
@@ -21,11 +22,35 @@ type CreateUserResponse struct {
 	Success bool `json:"success,omitempty"`
 }
 
+type UpdateRequest struct {
+}
+
+type UpdateResponse struct {
+	Message string `json:"message,omitempty"`
+}
+
 func NewEndpoints(u usersvc.UserSvc) *Endpoints {
 	return &Endpoints{
-		CreateUser: MakeCreateUserEndpoint(u),
+		CreateUser:    MakeCreateUserEndpoint(u),
+		StreamUpdates: MakeStreamUpdatesEndpoint(u),
 	}
 
+}
+
+func MakeStreamUpdatesEndpoint(u usersvc.UserSvc) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		_ = request.(UpdateRequest)
+		resp, err := u.StreamUpdates(ctx)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return UpdateResponse{
+			Message: resp.Message,
+		}, nil
+
+	}
 }
 
 func MakeCreateUserEndpoint(u usersvc.UserSvc) endpoint.Endpoint {

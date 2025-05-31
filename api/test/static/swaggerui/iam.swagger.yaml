@@ -9,6 +9,12 @@ consumes:
 produces:
   - application/json
 paths:
+  /v1/updates:
+    get:
+      operationId: UserSvc_StreamUpdates
+      responses: {}
+      tags:
+        - UserSvc
   /v1/users:
     post:
       summary: Create User
@@ -41,3 +47,8 @@ definitions:
     properties:
       success:
         type: boolean
+  apiv1UpdateResponse:
+    type: object
+    properties:
+      message:
+        type: string
