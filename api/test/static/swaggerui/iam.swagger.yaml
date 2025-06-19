@@ -10,6 +10,22 @@ produces:
   - application/json
 paths:
   /v1/users:
+    get:
+      summary: Get Users
+      description: Get users
+      operationId: UserSvc_GetUsers
+      responses:
+        "200":
+          description: Sucessfully creates user
+          schema:
+            $ref: '#/definitions/apiv1CreateUserResponse'
+      parameters:
+        - name: userId
+          in: query
+          required: false
+          type: string
+      tags:
+        - UserSvc
     post:
       summary: Create User
       description: Creates a new uaer
@@ -41,3 +57,8 @@ definitions:
     properties:
       success:
         type: boolean
+  apiv1GetUsersResponse:
+    type: object
+    properties:
+      message:
+        type: string

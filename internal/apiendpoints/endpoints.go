@@ -11,6 +11,7 @@ import (
 
 type Endpoints struct {
 	CreateUser endpoint.Endpoint
+	GetUsers   endpoint.Endpoint
 }
 
 type CreateUserRequest struct {
@@ -20,12 +21,32 @@ type CreateUserRequest struct {
 type CreateUserResponse struct {
 	Success bool `json:"success,omitempty"`
 }
+type GetUserRequest struct {
+	UserID string
+}
+
+type GetUsersResponse struct {
+	Message string
+}
 
 func NewEndpoints(u usersvc.UserSvc) *Endpoints {
 	return &Endpoints{
 		CreateUser: MakeCreateUserEndpoint(u),
+		GetUsers:   MakeGetUsersEndpoint(u),
 	}
 
+}
+
+func MakeGetUsersEndpoint(u usersvc.UserSvc) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(GetUserRequest)
+		ch := make(chan string)
+		go u.GetUsers(req.UserID, ch)
+		for msg := range ch {
+			return GetUsersResponse{Message: msg}, nil
+		}
+		return nil, nil
+	}
 }
 
 func MakeCreateUserEndpoint(u usersvc.UserSvc) endpoint.Endpoint {

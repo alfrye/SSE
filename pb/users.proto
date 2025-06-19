@@ -31,8 +31,39 @@ service UserSvc {
         }
         };
     };
+    rpc GetUsers(GetUsersRequest) returns ( GetUsersResponse) {
+    option (google.api.http) = {
+      get: "/v1/users",
+     
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "Get Users";
+        description: "Get users";
+        tags: "UserSvc"
+        responses: {
+            key: "200"
+            value: {
+                description: "Sucessfully creates user",
+                schema: {
+                    json_schema: {
+                        ref: ".userservice.apiv1.CreateUserResponse"
+                    }
+                }
+            }
+        }
+        };
+    };
 }
 
+
+
+message GetUsersRequest {
+    string user_id = 1;
+}
+
+message GetUsersResponse {
+    string message = 1;
+}
 
 message User {
     int32 id = 1;
