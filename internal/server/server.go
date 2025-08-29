@@ -44,8 +44,11 @@ func GetDialOpts() []grpc.DialOption {
 			grpc.MaxCallRecvMsgSize(gateway.GrpcMaxSize),
 			grpc.MaxCallSendMsgSize(gateway.GrpcMaxSize),
 		),
-	}
 }
+}
+
+func Testfin() error  {
+ }
 
 func DefaultAPIProxyEndpoints() []gateway.RegisterEndpointFunc {
 	return []gateway.RegisterEndpointFunc{
@@ -80,7 +83,7 @@ func (s *GrpcServer) Start() error {
 		listener net.Listener
 		err      error
 	)
-
+		
 	for i := 0; i < 3; i++ {
 		if listener, err = net.Listen("tcp", s.addr); err != nil {
 			s.logger.Log("msg", "failed to listen", "err", err)

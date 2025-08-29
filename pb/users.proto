@@ -31,7 +31,7 @@ service UserSvc {
         }
         };
     };
-    rpc GetUsers(GetUsersRequest) returns ( GetUsersResponse) {
+    rpc GetUsers(GetUsersRequest) returns (stream GetUsersResponse) {
     option (google.api.http) = {
       get: "/v1/users",
      
@@ -53,8 +53,31 @@ service UserSvc {
         }
         };
     };
-}
 
+
+   rpc StreamData(MyStreamingRequest) returns (stream MyStreamingResponse) {
+    option (google.api.http) = {
+      get: "/v1/stream",
+     
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "Stream Date";
+        description: "Stream Data";
+        tags: "UserSvc"
+        responses: {
+            key: "200"
+            value: {
+                description: "Sucessfully stream data",
+                schema: {
+                    json_schema: {
+                        ref: ".userservice.apiv1.MyStreamingResponse"
+                    }
+                }
+            }
+        }
+        };
+    };
+}
 
 
 message GetUsersRequest {
@@ -80,3 +103,10 @@ message CreateUserResponse {
     bool success = 2;
 }
 
+message MyStreamingRequest {
+    string input_data = 1;
+}
+
+message MyStreamingResponse {
+    string chunk_data = 1;
+}

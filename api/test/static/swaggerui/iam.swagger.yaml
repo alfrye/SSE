@@ -9,6 +9,23 @@ consumes:
 produces:
   - application/json
 paths:
+  /v1/stream:
+    get:
+      summary: Stream Date
+      description: Stream Data
+      operationId: UserSvc_StreamData
+      responses:
+        "200":
+          description: Sucessfully stream data
+          schema:
+            $ref: '#/definitions/apiv1MyStreamingResponse'
+      parameters:
+        - name: inputData
+          in: query
+          required: false
+          type: string
+      tags:
+        - UserSvc
   /v1/users:
     get:
       summary: Get Users
@@ -61,4 +78,9 @@ definitions:
     type: object
     properties:
       message:
+        type: string
+  apiv1MyStreamingResponse:
+    type: object
+    properties:
+      chunkData:
         type: string

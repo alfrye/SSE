@@ -8,7 +8,12 @@
         "source": "${env:HOME}/.kube", 
         "target": "/home/vscode/.kube",
         "type": "bind"
-        }
+        },
+    {
+      "source" : "${env:HOME}/.config",
+      "target": "/home/vscode/.config",
+      "type": "bind"
+    },
     ],
 	"remoteUser": "vscode",
 	"containerEnv": {
@@ -17,7 +22,7 @@
 	"forwardPorts": [
 		3000
 	],
-	"customizations": {
+	"customizations": 
 		"vscode": {
 			"extensions": [
                 "ms-kubernetes-tools.vscode-kubernetes-tools",
