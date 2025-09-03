@@ -48,7 +48,8 @@ func GetDialOpts() []grpc.DialOption {
 }
 
 func Testfin() error  {
- }
+    fmt.Pringln("kkk")
+}
 
 func DefaultAPIProxyEndpoints() []gateway.RegisterEndpointFunc {
 	return []gateway.RegisterEndpointFunc{

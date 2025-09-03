@@ -10,7 +10,7 @@ ARG GOLANG_VERSION="1.22.2"
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION="22.0.0"
 ENV GOPATH="/go"
-ENV PATH="${PATH}:/usr/local/go/bin:/go/bin"
+ENV PATH="${PATH}:/usr/local/go/bin:$GOPATH/bin:/home/${USERNAME}/.local/share/lua-lang-server/bin"
 
 
 RUN mkdir -p $NVM_DIR
@@ -40,7 +40,9 @@ USER vscode
 #WORKDIR /tmp
 RUN mkdir -p ~/.local/share/lua-lang-server  
 RUN sudo curl --connect-timeout 15 --retry-delay 5 -fsSL -O https://github.com/LuaLS/lua-language-server/releases/download/3.15.0/lua-language-server-3.15.0-linux-x64.tar.gz \ 
-&&  tar -xvzf lua-language-server-3.15.0-linux-x64.tar.gz -C ~/.local/share/lua-lang-server 
+&&  tar -xvzf lua-language-server-3.15.0-linux-x64.tar.gz -C ~/.local/share/lua-lang-server && \
+sudo rm lua-language-server-3.15.0-linux-x64.tar.gz
+
 #&& rm -rf /tmp
 # #WORKDIR /
 # Install nodejs 
@@ -80,8 +82,9 @@ ARG PROTOC_GEN_GO_VERSION="v1.28.1"
 ENV GOPATH="/go"
 ENV PATH="${PATH}:/usr/local/go/bin:/go/bin:~/.local/share/lua-lang-server/bin"
 ENV GOCACHE=/home/vscode/.cache/go-build
-
-RUN mkdir -p $GOPATH $GOCACHE
+ENV CACHE=/home/vscode/.cache
+#USER vscode
+RUN  mkdir -p $GOPATH $GOCACHE
 
 
 RUN go install golang.org/x/tools/gopls@${GO_PLS_VERSION} \
@@ -96,7 +99,13 @@ RUN go install golang.org/x/tools/gopls@${GO_PLS_VERSION} \
   && go install golang.org/x/tools/cmd/goimports@${GOIMPORTS_VERSION} \
   && go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest \
   && go clean -modcache -cache -x \
-  && chown -R vscode:vscode $GOPATH $GOCACHE
+  && chown -R vscode:vscode $GOPATH $CACHE
+
+# Install formatters used by null-ls (outside Go ecosystem)
+RUN npm install -g @johnnymorganz/stylua-bin && \
+    apt-get update && apt-get install -y shfmt && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install kubectl
 ARG KUBERNETES_VERSION="v1.29.2"
 ENV K3S_VERSION="${KUBERNETES_VERSION}-k3s1"
@@ -114,3 +123,4 @@ RUN curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/in
 RUN curl -LO "https://dl.k8s.io/release/$(sudo curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
   && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 USER vscode
+ENV PATH="/usr/local/go/bin:/go/bin:${PATH}"
