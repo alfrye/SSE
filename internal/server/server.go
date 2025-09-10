@@ -3,8 +3,6 @@ package server
 import (
 	"context"
 	"fmt"
-	"net"
-	"server-events/internal/apiendpoints"
 	"server-events/internal/apitransports"
 	userapisvc "server-events/internal/services/usersvc"
 	pbapiv1 "server-events/pkg/genproto/pb"
@@ -30,9 +28,9 @@ type APIServices struct {
 }
 
 type GrpcServer struct {
-	server     *grpc.Server
-	logger     log.Logger
-	addr       string
+	server *grpc.Server
+	logger log.Logger
+	string
 	endpoints  []gateway.RegisterEndpointFunc
 	serverType string
 }
@@ -44,14 +42,19 @@ func GetDialOpts() []grpc.DialOption {
 			grpc.MaxCallRecvMsgSize(gateway.GrpcMaxSize),
 			grpc.MaxCallSendMsgSize(gateway.GrpcMaxSize),
 		),
-}
+	}
 }
 
-func Testfin() error  {
-    fmt.Pringln("kkk")
+// Testfin prints diagnostics
+func Testfin(msg string,id int) error {
+	fmt.Println("kkk")
+	fmt.Println("test")
+	fmt.Println("hello")
+	return nil
 }
 
 func DefaultAPIProxyEndpoints() []gateway.RegisterEndpointFunc {
+	Testfin("ss",9)
 	return []gateway.RegisterEndpointFunc{
 		pbapiv1.RegisterUserSvcHandlerFromEndpoint,
 	}
@@ -59,7 +62,6 @@ func DefaultAPIProxyEndpoints() []gateway.RegisterEndpointFunc {
 
 func NewAPIServer(svcs *APIServices, logger log.Logger) *GrpcServer {
 	grpcServer := grpc.NewServer(
-
 		grpc.MaxRecvMsgSize(gateway.GrpcMaxSize),
 		grpc.MaxSendMsgSize(gateway.GrpcMaxSize),
 	)
@@ -77,6 +79,7 @@ func NewAPIServer(svcs *APIServices, logger log.Logger) *GrpcServer {
 		endpoints:  svcs.Endpoints,
 		serverType: "grpc",
 	}
+	err := Testfin()
 }
 
 func (s *GrpcServer) Start() error {
@@ -84,7 +87,7 @@ func (s *GrpcServer) Start() error {
 		listener net.Listener
 		err      error
 	)
-		
+
 	for i := 0; i < 3; i++ {
 		if listener, err = net.Listen("tcp", s.addr); err != nil {
 			s.logger.Log("msg", "failed to listen", "err", err)
