@@ -18,9 +18,8 @@
 		3000
 	],
   "features": {
-		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
-			"packages": "neovim,stow,zsh,fzf,python3-pip"
-		}
+     "ghcr.io/duduribeiro/devcontainer-features/neovim:1" : {
+     },
 	},
 	"customizations": 
 		"vscode": {
