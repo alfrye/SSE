@@ -50,6 +50,7 @@ func Testfin(msg string,id int) error {
 	fmt.Println("kkk")
 	fmt.Println("test")
 	fmt.Println("hello")
+	fmt.Printlx(("hhe")
 	return nil
 }
 

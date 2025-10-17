@@ -9,11 +9,6 @@
         "target": "/home/vscode/.kube",
         "type": "bind"
         },
-    {
-      "source" : "${env:HOME}/.config",
-      "target": "/home/vscode/.config",
-      "type": "bind"
-    },
     ],
 	"remoteUser": "vscode",
 	"containerEnv": {
@@ -22,6 +17,11 @@
 	"forwardPorts": [
 		3000
 	],
+  "features": {
+		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+			"packages": "neovim,stow,zsh,fzf,python3-pip"
+		}
+	},
 	"customizations": 
 		"vscode": {
 			"extensions": [
